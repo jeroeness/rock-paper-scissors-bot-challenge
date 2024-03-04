@@ -2,13 +2,29 @@
 
 This is a simple Rock Paper Scissors bot programming challange. This is the current top 20 bots:
 
-@
+<!-- START TABLE -->
+| Rank | Name                | Author | Description                       | Score   |
+|------|---------------------|--------|-----------------------------------|---------|
+| 1    | Learner             | Jeroen | Cycles through Rock, Paper, Scis… | 1028.14 |
+| 2    | Delayed Mirror      | Jeroen | Mirrors the opponent's second pr… | 704.57  |
+| 3    | Cycler              | Jeroen | Cycles through Rock, Paper, Scis… | 488.57  |
+| 4    | Cycler with a phase | Jeroen | Cycles through Rock, Paper, Scis… | 488.14  |
+| 5    | Reverse Cycler      | Jeroen | Reverse Cycler agent.             | 488.0   |
+| 6    | RockScissors        | Jeroen | Loves Rock, deviates with Scisso… | 392.71  |
+| 7    | Rock                | Jeroen | Always Rocks                      | 357.14  |
+| 8    | Mirror              | Jeroen | Mirrors the opponent's previous … | 127.57  |
+<!-- END TABLE -->
 
 ## Rules
 
-- Rock beats scissors (*two points* are awarded)
-- Scissors beats paper (one point are awarded)
-- Paper beats rock (one point are awarded)
+Agents play 1000 rounds of rock paper scissors with the standard rules, except for one small change:
+
+- Rock beats scissors (**two points** are awarded)
+- Scissors beats paper (one point is awarded)
+- Paper beats rock (one point is awarded)
+
+## Goal
+The goal of the agent is to score on average the most points against all opponents. Come up with a strategy which maximizes score over all possible opponent strategies
 
 ## Installation
 
