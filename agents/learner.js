@@ -1,5 +1,5 @@
 // Author: Jeroen
-// Description: Cycles through Rock, Paper, Scissors
+// Description: Predicts opponent moves
 // Name: Learner
 
 function (round, my, other) {

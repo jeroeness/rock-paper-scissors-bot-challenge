@@ -3,5 +3,5 @@
 // Name: RockScissors
 
 function (round, my, other) {
-    return "RRRS"[round % 4]
+    return "RRS"[round % 3]
 };
