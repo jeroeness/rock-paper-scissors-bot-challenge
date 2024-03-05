@@ -25,11 +25,17 @@ Agents play 1000 rounds of rock paper scissors with the standard rules, except f
 - Paper beats rock (one point is awarded)
 - Zero points are awarded in other cases
 
+|   \   | **R** | **P** | **S** |
+|-------|-------|-------|-------|
+| **R** | 0 \ 0 | 0 \ 1 | 2 \ 0 |
+| **P** | 1 \ 0 | 0 \ 0 | 0 \ 1 |
+| **S** | 0 \ 2 | 1 \ 0 | 0 \ 0 |
+
 Every turn the bot has to return one of the three choices: Rock, Paper or Scissors indicated by an "R", "P" or "S" respectively.
 
 ## Goal
 The goal of the agent is to score on average the most points against all opponents. Come up with a strategy which maximizes score over all possible opponent strategies.
-
+<!-- Zeg ook dat de score meeweegt dat hij tegen zichzelf speelt -->
 ## Installation
 
 1. Clone the repository: `git clone https://github.com/jeroeness/rock-paper-scissors-bot-challenge.git`
@@ -49,15 +55,16 @@ To create your own agent, follow these steps:
 // Description: <<Brief description here>>
 // Name: <<Agent name here>>
 
-function (round, my_moves, opponent_moves) {
+function (round, moves, opp_moves, rnd) {
     return "RPS"[round % 3]
 };
 ```
 
 The function takes three arguments:
-1. the round number we are in (int)
-2. An array of previously played moves of the agent
-3. An array of previously played moves of the opponent agent
+1. `round` the round number we are in (int)
+2. `moves` An array of previously played moves of the agent
+3. `opp_moves` An array of previously played moves of the opponent agent
+4. `rnd` a randomly generated number between 0 and 1 (float)
 
 ## Testing your agent
 You can test your agent by running it against a specific other againt:
@@ -74,7 +81,7 @@ python rps.py agents/pseudo_random.js -r 100
 Please do participate in this contest. Submit your agent as a js file in the agents folder with a pull request.
 
 We use fair play rules:
-* Random is not allowed, only use deterministicly random functions.
+* Random is not allowed, only use deterministicly random functions. <!-- Zeg iets over dat rnd wel toegestaan is -->
 * Do not make the bot halt for longer than 2ms
 * Do not use libraries other than the standard library.
 * Don't use exploits

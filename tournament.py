@@ -19,7 +19,7 @@ for file in js_files:
         names.append(re.search(r"// Name: (.+)", code).group(1))
         descriptions.append(re.search(r"// Description: (.+)", code).group(1)[0:50])
 
-matches = [[a, b] for a in range(len(codes)) for b in range(a + 1, len(codes))]
+matches = [[a, b] for a in range(len(codes)) for b in range(a, len(codes))]
 for a, b in tqdm(matches):
     score_a, score_b = play(codes[a], codes[b])
     scores[a] += score_a

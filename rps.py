@@ -2,7 +2,8 @@ import js2py
 import argparse
 import glob
 import os
-
+import random
+import hashlib
 
 def play(code1, code2, verbose=False, rounds=1000):
     moves = [[], []]
@@ -10,8 +11,10 @@ def play(code1, code2, verbose=False, rounds=1000):
     scores = [0, 0]
     p1, p2 = js2py.eval_js(codes[0]), js2py.eval_js(codes[1])
     for r in range(1, rounds + 1):
-        m1 = p1(r, moves[0], moves[1])
-        m2 = p2(r, moves[1], moves[0])
+        random.seed(int(hashlib.sha1(codes[0].encode("utf-8")).hexdigest(), 16) % (10 ** 8) + r + rounds)
+        m1 = p1(r, moves[0], moves[1], random.random())
+        random.seed(int(hashlib.sha1(codes[1].encode("utf-8")).hexdigest(), 16) % (10 ** 7) + r + rounds)
+        m2 = p2(r, moves[1], moves[0], random.random())
         assert m1 in ["R", "P", "S"], f"Invalid move '{m1}' in {codes[0]}"
         assert m2 in ["R", "P", "S"], f"Invalid move '{m2}' in {codes[1]}"
         moves[0].append(m1)
@@ -65,8 +68,6 @@ if __name__ == "__main__":
         js_files = glob.glob("./agents/*.js")
         total_score = 0
         for file in js_files:
-            if os.path.basename(file) == agent_fname:
-                continue
             code2 = open(file, "r").read()
             scores = play(code, code2, verbose=args.verbose, rounds=args.rounds)
             total_score += scores[0]
