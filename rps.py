@@ -5,15 +5,25 @@ import os
 import random
 import hashlib
 
+
 def play(code1, code2, verbose=False, rounds=1000):
     moves = [[], []]
     codes = [code1, code2]
     scores = [0, 0]
     p1, p2 = js2py.eval_js(codes[0]), js2py.eval_js(codes[1])
+    draw_counter = 0
     for r in range(1, rounds + 1):
-        random.seed(int(hashlib.sha1(codes[0].encode("utf-8")).hexdigest(), 16) % (10 ** 8) + r + rounds)
+        random.seed(
+            int(hashlib.sha1(codes[0].encode("utf-8")).hexdigest(), 16) % (10**8)
+            + r
+            + rounds
+        )
         m1 = p1(r, moves[0], moves[1], random.random())
-        random.seed(int(hashlib.sha1(codes[1].encode("utf-8")).hexdigest(), 16) % (10 ** 7) + r + rounds)
+        random.seed(
+            int(hashlib.sha1(codes[1].encode("utf-8")).hexdigest(), 16) % (10**7)
+            + r
+            + rounds
+        )
         m2 = p2(r, moves[1], moves[0], random.random())
         assert m1 in ["R", "P", "S"], f"Invalid move '{m1}' in {codes[0]}"
         assert m2 in ["R", "P", "S"], f"Invalid move '{m2}' in {codes[1]}"
@@ -22,7 +32,11 @@ def play(code1, code2, verbose=False, rounds=1000):
         verbose_score1 = " "
         verbose_score2 = " "
         if m1 == m2:
-            pass
+            draw_counter += 1
+            if draw_counter > 50:
+                if verbose:
+                    print(f"Round {r:4}: Draw limit reached")
+                break
         elif m1 == "S" and m2 == "P":
             scores[0] += 1
             verbose_score1 = "*"

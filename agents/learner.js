@@ -3,7 +3,7 @@
 // Name: Learner
 
 function (round, my, opp, rnd) {
-    seq = other.join('');
+    seq = opp.join('');
     if (seq.length < 3) {
         return "R";
     }

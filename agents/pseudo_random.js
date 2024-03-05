@@ -3,5 +3,5 @@
 // Name: Pseudo Random
 
 function (round, my, opp, rnd) {
-    return "RPS"[Math.floor(rnd() * 3)];
+    return "RPS"[Math.floor(rnd * 3)];
 };

@@ -5,15 +5,15 @@ This is a simple Rock Paper Scissors bot programming challange. This is the curr
 <!-- START TABLE -->
 | Rank | Name                | Author | Description                       | Score  |
 |------|---------------------|--------|-----------------------------------|--------|
-| 1    | Learner             | Jeroen | Cycles through Rock, Paper, Scis… | 952.5  |
-| 2    | Delayed Mirror      | Jeroen | Mirrors the opponent's second pr… | 668.88 |
-| 3    | Reverse Cycler      | Jeroen | Reverse Cycler agent.             | 484.62 |
-| 4    | Cycler with a phase | Jeroen | Cycles through Rock, Paper, Scis… | 482.75 |
-| 5    | Cycler              | Jeroen | Cycles through Rock, Paper, Scis… | 481.25 |
-| 6    | Pseudo Random       | Jeroen | Pseudo random agent.              | 429.62 |
-| 7    | RockScissors        | Jeroen | Loves Rock, deviates with Scisso… | 420.0  |
-| 8    | Rock                | Jeroen | Always Rocks                      | 396.5  |
-| 9    | Mirror              | Jeroen | Mirrors the opponent's previous … | 161.12 |
+| 1    | Learner             | Jeroen | Predicts opponent moves           | 497.69 |
+| 2    | Delayed Mirror      | Jeroen | Mirrors the opponent's second pr… | 403.26 |
+| 3    | Cycler with a phase | Jeroen | Cycles through Paper, Scissors, … | 288.13 |
+| 4    | Reverse Cycler      | Jeroen | Reverse Cycler agent.             | 213.65 |
+| 5    | Cycler              | Jeroen | Cycles through Rock, Paper, Scis… | 213.05 |
+| 6    | RockScissors        | Jeroen | Loves Rock, deviates with Scisso… | 84.03  |
+| 7    | Pseudo Random       | Jeroen | Pseudo random agent.              | 54.76  |
+| 8    | Rock                | Jeroen | Always Rocks                      | 36.1   |
+| 9    | Mirror              | Jeroen | Mirrors the opponent's previous … | 23.13  |
 <!-- END TABLE -->
 
 ## Game Rules

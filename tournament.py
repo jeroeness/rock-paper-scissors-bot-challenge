@@ -3,6 +3,7 @@ import polars as pl
 import glob
 import re
 from tqdm import tqdm
+import random
 
 js_files = glob.glob("./agents/*.js")
 codes = []
@@ -20,13 +21,15 @@ for file in js_files:
         descriptions.append(re.search(r"// Description: (.+)", code).group(1)[0:50])
 
 matches = [[a, b] for a in range(len(codes)) for b in range(a, len(codes))]
+total_rounds = random.randint(1000, 1500)
+print(f"Playing {total_rounds} rounds")
 for a, b in tqdm(matches):
     score_a, score_b = play(codes[a], codes[b])
     scores[a] += score_a
     scores[b] += score_b
 
 for i in range(len(codes)):
-    scores[i] = round(float(scores[i]) / (len(codes) - 1), 2)
+    scores[i] = round(float(scores[i]) / len(codes) / total_rounds * 1000, 2)
 
 
 result = pl.DataFrame(

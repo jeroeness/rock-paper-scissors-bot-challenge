@@ -3,5 +3,5 @@
 // Name: Mirror
 
 function (round, my, opp, rnd) {
-    return other[other.length - 1] || "RPS"[round % 3]
+    return opp[opp.length - 1] || "R";
 };
