@@ -5,44 +5,57 @@ import re
 from tqdm import tqdm
 import random
 
+
+class Agent:
+    def __init__(self, name, author, code, description):
+        self.name = name
+        self.author = author
+        self.code = code
+        self.description = description
+        self.score = 0
+
+
+agents = []
+
 js_files = glob.glob("./agents/*.js")
-codes = []
-scores = []
-names = []
-authors = []
-descriptions = []
 for file in js_files:
     with open(file, "r") as f:
         code = f.read()
-        codes.append(code)
-        scores.append(0)
-        authors.append(re.search(r"// Author: (.+)", code).group(1))
-        names.append(re.search(r"// Name: (.+)", code).group(1))
-        descriptions.append(re.search(r"// Description: (.+)", code).group(1)[0:50])
+        agents.append(
+            Agent(
+                re.search(r"// Name: (.+)", code).group(1),
+                re.search(r"// Author: (.+)", code).group(1),
+                code,
+                re.search(r"// Description: (.+)", code).group(1),
+            )
+        )
 
-matches = [[a, b] for a in range(len(codes)) for b in range(a, len(codes))]
-total_rounds = random.randint(1000, 1007)
+
+matches = [[a, b] for a in range(len(agents)) for b in range(a, len(agents))]
+total_rounds = 1000
 print(f"Playing {total_rounds} rounds")
 for a, b in tqdm(matches):
-    score_a, score_b = play(codes[a], codes[b])
-    scores[a] += score_a
-    scores[b] += score_b
+    score_a, score_b = play(agents[a].code, agents[b].code)
+    agents[a].score += score_a
+    agents[b].score += score_b
 
-for i in range(len(codes)):
-    scores[i] = round(float(scores[i]) / len(codes) / total_rounds * 1000, 2)
+for i in range(len(agents)):
+    agents[i].score = round(
+        float(agents[i].score) / len(agents) / total_rounds * 1000, 2
+    )
 
 
 result = pl.DataFrame(
     {
-        "Rank": list(range(1, len(codes) + 1)),
-        "Name": names,
-        "Author": authors,
-        "Description": descriptions,
-        "Score": scores,
+        "Rank": list(range(1, len(agents) + 1)),
+        "Name": [a.name for a in agents],
+        "Author": [a.author for a in agents],
+        "Description": [a.description for a in agents],
+        "Score": [a.score for a in agents],
     }
 )
 result = result.sort("Score", descending=True)
-result = result.with_columns(pl.Series(list(range(1, len(codes) + 1))).alias("Rank"))
+result = result.with_columns(pl.Series(list(range(1, len(agents) + 1))).alias("Rank"))
 result = result.head(20)
 
 
