@@ -21,7 +21,7 @@ for file in js_files:
         descriptions.append(re.search(r"// Description: (.+)", code).group(1)[0:50])
 
 matches = [[a, b] for a in range(len(codes)) for b in range(a, len(codes))]
-total_rounds = random.randint(1000, 1500)
+total_rounds = random.randint(1000, 1007)
 print(f"Playing {total_rounds} rounds")
 for a, b in tqdm(matches):
     score_a, score_b = play(codes[a], codes[b])

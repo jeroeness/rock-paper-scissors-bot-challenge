@@ -88,4 +88,4 @@ if __name__ == "__main__":
             print(
                 f"{scores[0]:4}:{scores[1]:-4} \t {agent_fname} VS {os.path.basename(file)}"
             )
-        print(f"Average score: {total_score/(len(js_files)-1):.2f}")
+        print(f"Average score: {total_score/(len(js_files)):.2f}")
