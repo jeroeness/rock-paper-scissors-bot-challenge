@@ -2,7 +2,7 @@
 // Description: Predicts opponent moves
 // Name: Learner
 
-function (round, my, other) {
+function (round, my, opp, rnd) {
     seq = other.join('');
     if (seq.length < 3) {
         return "R";

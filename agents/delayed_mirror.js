@@ -2,6 +2,6 @@
 // Description: Mirrors the opponent's second previous move, starts with Paper twice
 // Name: Delayed Mirror
 
-function (round, my, other) {
+function (round, my, opp, rnd) {
     return other[other.length - 2] || "P";
 };

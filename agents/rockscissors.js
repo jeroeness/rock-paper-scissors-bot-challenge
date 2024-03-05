@@ -2,6 +2,6 @@
 // Description: Loves Rock, deviates with Scissors
 // Name: RockScissors
 
-function (round, my, other) {
+function (round, my, opp, rnd) {
     return "RRS"[round % 3]
 };

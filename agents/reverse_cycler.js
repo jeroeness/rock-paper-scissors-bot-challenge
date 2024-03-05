@@ -2,6 +2,6 @@
 // Name: Reverse Cycler
 // Author: Jeroen
 
-function (round, my, other) {
+function (round, my, opp, rnd) {
     return "SRP"[round % 3]
 };

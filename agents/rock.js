@@ -2,6 +2,6 @@
 // Name: Rock
 // Author: Jeroen
 
-function (round, my, other) {
+function (round, my, opp, rnd) {
     return "R";
 };
