@@ -3,5 +3,5 @@
 // Name: RockScissors
 
 function (round, my, opp, rnd) {
-    return "RRS"[round % 3]
+    return "RRS"[Math.floor(rnd * 3)]
 };

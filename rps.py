@@ -7,7 +7,7 @@ import hashlib
 
 
 def play(code1, code2, verbose=False, rounds=1000):
-    moves = [[], []]
+    moves = ["", ""]
     codes = [code1, code2]
     scores = [0, 0]
     p1, p2 = js2py.eval_js(codes[0]), js2py.eval_js(codes[1])
@@ -27,10 +27,12 @@ def play(code1, code2, verbose=False, rounds=1000):
         m2 = p2(r, moves[1], moves[0], random.random())
         assert m1 in ["R", "P", "S"], f"Invalid move '{m1}' in {codes[0]}"
         assert m2 in ["R", "P", "S"], f"Invalid move '{m2}' in {codes[1]}"
-        moves[0].append(m1)
-        moves[1].append(m2)
+        moves[0] += m1
+        moves[1] += m2
         verbose_score1 = " "
         verbose_score2 = " "
+        if m1 != m2:
+            draw_counter = 0
         if m1 == m2:
             draw_counter += 1
             if draw_counter > 50:

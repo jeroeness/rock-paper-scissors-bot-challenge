@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug",
+            "preLaunchTask": "cargo build",
+            "program": "${workspaceFolder}/target/debug/rps-rust",
+            "args": [
+                "--agent",
+                "learner",
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

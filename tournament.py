@@ -63,6 +63,7 @@ with open("README.md", "r") as f:
     readme = f.read()
     with pl.Config(
         tbl_formatting="ASCII_MARKDOWN",
+        tbl_rows=10**9,
         tbl_hide_column_data_types=True,
         tbl_hide_dataframe_shape=True,
     ):

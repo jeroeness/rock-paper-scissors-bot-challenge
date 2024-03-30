@@ -7,15 +7,18 @@ This is a simple Rock Paper Scissors bot programming challange.
 <!-- START TABLE -->
 | Rank | Name                | Author | Description                       | Score  |
 |------|---------------------|--------|-----------------------------------|--------|
-| 1    | Learner             | Jeroen | Predicts opponent moves           | 729.11 |
-| 2    | Delayed Mirror      | Jeroen | Mirrors the opponent's second pr… | 590.78 |
-| 3    | Cycler with a phase | Jeroen | Cycles through Paper, Scissors, … | 422.11 |
-| 4    | Reverse Cycler      | Jeroen | Reverse Cycler agent.             | 313.0  |
-| 5    | Cycler              | Jeroen | Cycles through Rock, Paper, Scis… | 312.11 |
-| 6    | RockScissors        | Jeroen | Loves Rock, deviates with Scisso… | 123.11 |
-| 7    | Pseudo Random       | Jeroen | Pseudo random agent.              | 80.22  |
-| 8    | Rock                | Jeroen | Always Rocks                      | 52.89  |
-| 9    | Mirror              | Jeroen | Mirrors the opponent's previous … | 33.89  |
+| 1    | Learner             | Jeroen | Predicts opponent moves           | 711.67 |
+| 2    | Delayed Mirror      | Jeroen | Mirrors the opponent's second pr… | 656.0  |
+| 3    | Random Counter      | Jeroen | Random Counter agent.             | 585.0  |
+| 4    | Random Biased       | Jeroen | Random agent biased to Rock.      | 497.5  |
+| 5    | RockScissors        | Jeroen | Loves Rock, deviates with Scisso… | 479.5  |
+| 6    | Pseudo Random       | Jeroen | Pseudo random agent.              | 474.08 |
+| 7    | StrategicAdapt      | GPT4   | Adaptive and strategic bot with … | 458.17 |
+| 8    | Reverse Cycler      | Jeroen | Reverse Cycler agent.             | 444.42 |
+| 9    | Rock                | Jeroen | Always Rocks                      | 421.67 |
+| 10   | Cycler              | Jeroen | Cycles through Rock, Paper, Scis… | 412.5  |
+| 11   | Cycler with a phase | Jeroen | Cycles through Paper, Scissors, … | 406.58 |
+| 12   | Mirror              | Jeroen | Mirrors the opponent's previous … | 241.0  |
 <!-- END TABLE -->
 
 ## Game Rules
