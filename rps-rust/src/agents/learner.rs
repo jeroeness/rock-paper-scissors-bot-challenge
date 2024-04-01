@@ -6,8 +6,9 @@ impl agent::Agent for Learner {
     fn get_attributes(&self) -> agent::AgentAttributes {
         agent::AgentAttributes {
             author: "Jeroen",
-            description: "Mirrors the opponent's second previous move",
-            name: "Delayed Mirror",
+            description:
+                "Learns from the opponent's previous moves and tries to predict the next one",
+            name: "Learner",
             enabled: true,
         }
     }

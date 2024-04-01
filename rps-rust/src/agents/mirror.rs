@@ -7,7 +7,7 @@ impl agent::Agent for Mirror {
         agent::AgentAttributes {
             author: "Jeroen",
             description: "Mirrors the opponent's previous move",
-            name: " Mirror",
+            name: "Mirror",
             enabled: true,
         }
     }

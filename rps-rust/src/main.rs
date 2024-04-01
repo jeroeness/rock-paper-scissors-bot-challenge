@@ -115,7 +115,11 @@ fn main() {
     match args.agent {
         Some(agent) => match args.opponent {
             Some(opponent) => {
-                single_battle(&agent, &opponent, args.verbose, args.rounds);
+                let scores = single_battle(&agent, &opponent, args.verbose, args.rounds);
+                println!(
+                    "{:>20} vs {:20} {:>4} : {:<4}",
+                    agent, opponent, scores[0], scores[1]
+                );
             }
             None => {
                 one_to_all(&agent, args.verbose, args.rounds);
