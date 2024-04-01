@@ -9,7 +9,7 @@ use rand::Rng;
 #[command(version, about, long_about = None)]
 struct Args {
     #[arg(short, long)]
-    agent: String,
+    agent: Option<String>,
 
     #[arg(short, long)]
     opponent: Option<String>,
@@ -55,31 +55,74 @@ fn get_all_agents() -> Vec<&'static str> {
     ]
 }
 
+fn battle_royale() {
+    let mut total_score = 0;
+    for agent1 in get_all_agents().iter() {
+        for agent2 in get_all_agents().iter() {
+            if agent1 == agent2 {
+                continue;
+            }
+
+            let agent1 = get_agent(agent1);
+            let agent2 = get_agent(agent2);
+            let scores = match_agents(&agent1, &agent2, false, 1000);
+            total_score += scores[0];
+            println!(
+                "{:>20} vs {:20} {:>4} : {:<4}",
+                agent1.get_attributes().name,
+                agent2.get_attributes().name,
+                scores[0],
+                scores[1]
+            );
+        }
+    }
+    println!(
+        "Average score: {}",
+        total_score as f64 / get_all_agents().len() as f64
+    );
+    // TODO keep scores of all agents
+}
+
+fn single_battle(agent1: &str, agent2: &str, verbose: bool, rounds: usize) -> [u64; 2] {
+    let agent1 = get_agent(agent1);
+    let agent2 = get_agent(agent2);
+    match_agents(&agent1, &agent2, verbose, rounds)
+}
+
+fn one_to_all(agent: &str, verbose: bool, rounds: usize) {
+    let mut total_score = 0;
+    for opponent in get_all_agents()
+        .iter()
+        .filter(|agent| get_agent(agent).get_attributes().enabled)
+        .collect::<Vec<_>>()
+    {
+        let scores = single_battle(&agent, opponent, verbose, rounds);
+        total_score += scores[0];
+        println!(
+            "{:>20} vs {:20} {:>4} : {:<4}",
+            agent, opponent, scores[0], scores[1]
+        );
+    }
+    println!(
+        "Average score: {}",
+        total_score as f64 / get_all_agents().len() as f64
+    );
+}
+
 fn main() {
     let args = Args::parse();
 
-    match args.opponent {
-        Some(opponent) => {
-            let agent1 = get_agent(&args.agent);
-            let agent2 = get_agent(&opponent);
-            match_agents(&agent1, &agent2, args.verbose, args.rounds);
-        }
-        None => {
-            let mut total_score = 0;
-            for opponent in get_all_agents().iter() {
-                let agent1 = get_agent(&args.agent);
-                let agent2 = get_agent(opponent);
-                let scores = match_agents(&agent1, &agent2, args.verbose, args.rounds);
-                total_score += scores[0];
-                println!(
-                    "{:>20} vs {:20} {:>4} : {:<4}",
-                    args.agent, opponent, scores[0], scores[1]
-                );
+    match args.agent {
+        Some(agent) => match args.opponent {
+            Some(opponent) => {
+                single_battle(&agent, &opponent, args.verbose, args.rounds);
             }
-            println!(
-                "Average score: {}",
-                total_score as f64 / get_all_agents().len() as f64
-            );
+            None => {
+                one_to_all(&agent, args.verbose, args.rounds);
+            }
+        },
+        None => {
+            battle_royale();
         }
     }
 }

@@ -12,6 +12,15 @@
                 "learner",
             ],
             "cwd": "${workspaceFolder}"
-        }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Torunament",
+            "preLaunchTask": "cargo build",
+            "program": "${workspaceFolder}/target/debug/rps-rust",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
     ]
 }
