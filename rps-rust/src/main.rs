@@ -78,37 +78,44 @@ fn battle_royale() {
 
     for agent1 in 0..battlers.len() {
         for agent2 in agent1..battlers.len() {
-            let scores = match_agents(
-                vec![battlers[agent1].agent, battlers[agent2].agent],
-                false,
-                rounds,
-            );
-            let scores2 = match_agents(
-                vec![battlers[agent2].agent, battlers[agent1].agent],
-                false,
-                rounds,
-            );
-
-            battlers[agent1].scores.push((scores[0] + scores2[1]) / 2);
-            battlers[agent2].scores.push((scores[1] + scores2[0]) / 2);
-        }
-    }
-    for b in battlers.iter_mut() {
-        b.weighted_score = 400.0;
-        println!("{:<20} {:?}", b.agent.get_attributes().name, b.scores)
-    }
-    for _ in 0..10 {
-        for i in 0..battlers.len() {
-            let sum_of_weights: f64 = battlers.iter().map(|b| b.weighted_score).sum();
-            // let total: u64 = battlers[i].scores.iter().map(|s| s).sum();
-            let mut total = 0.0;
-            for j in 0..battlers.len() {
-                total +=
-                    battlers[i].scores[j] as f64 * (battlers[j].weighted_score / rounds as f64);
+            let mut avg_score = [0.0, 0.0];
+            for trials in 0..9 {
+                let scores = match_agents(
+                    vec![battlers[agent1].agent, battlers[agent2].agent],
+                    false,
+                    rounds,
+                );
+                let scores2 = match_agents(
+                    vec![battlers[agent2].agent, battlers[agent1].agent],
+                    false,
+                    rounds,
+                );
+                avg_score[0] += (scores[0] + scores2[1]) as f64 / 2.0;
+                avg_score[1] += (scores[1] + scores2[0]) as f64 / 2.0;
             }
-            battlers[i].weighted_score = total as f64 / sum_of_weights * rounds as f64;
+            battlers[agent1].scores.push(avg_score[0] / 10.0);
+            battlers[agent2].scores.push(avg_score[1] / 10.0);
         }
     }
+    for i in 0..battlers.len() {
+        battlers[i].weighted_score = battlers[i].scores.iter().sum::<f64>() / battlers.len() as f64;
+    }
+    // for b in battlers.iter_mut() {
+    //     b.weighted_score = 400.0;
+    //     println!("{:<20} {:?}", b.agent.get_attributes().name, b.scores)
+    // }
+    // for _ in 0..10 {
+    //     for i in 0..battlers.len() {
+    //         let sum_of_weights: f64 = battlers.iter().map(|b| b.weighted_score).sum();
+    //         // let total: u64 = battlers[i].scores.iter().map(|s| s).sum();
+    //         let mut total = 0.0;
+    //         for j in 0..battlers.len() {
+    //             total +=
+    //                 battlers[i].scores[j] as f64 * (battlers[j].weighted_score / rounds as f64);
+    //         }
+    //         battlers[i].weighted_score = total as f64 / sum_of_weights * rounds as f64;
+    //     }
+    // }
     battlers.sort_by(|a, b| b.weighted_score.partial_cmp(&a.weighted_score).unwrap());
     println!("Rank  Agent                Author     Score");
     println!("====  ==================   =========  =====");

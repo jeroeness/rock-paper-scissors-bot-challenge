@@ -12,6 +12,6 @@ pub trait Agent {
 
 pub struct Battler<'a> {
     pub agent: &'a Box<dyn Agent>,
-    pub scores: Vec<u64>,
+    pub scores: Vec<f64>,
     pub weighted_score: f64,
 }
