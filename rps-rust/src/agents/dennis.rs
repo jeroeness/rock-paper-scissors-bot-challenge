@@ -8,7 +8,7 @@ impl agent::Agent for Dennis {
             author: "Dennis",
             description: "Dennis' amature agent",
             name: "Dennis Agent",
-            enabled: false,
+            enabled: true,
         }
     }
 
