@@ -83,8 +83,14 @@ fn battle_royale() {
                 false,
                 rounds,
             );
-            battlers[agent1].scores.push(scores[0]);
-            battlers[agent2].scores.push(scores[1]);
+            let scores2 = match_agents(
+                vec![battlers[agent2].agent, battlers[agent1].agent],
+                false,
+                rounds,
+            );
+
+            battlers[agent1].scores.push((scores[0] + scores2[1]) / 2);
+            battlers[agent2].scores.push((scores[1] + scores2[0]) / 2);
         }
     }
     for b in battlers.iter_mut() {
