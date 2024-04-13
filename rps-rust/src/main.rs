@@ -65,8 +65,8 @@ fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
 }
 
 fn battle_royale() {
-    let mut total_score = 0;
-    let mut battlers = get_all_agents()
+    let binding = get_all_agents();
+    let mut battlers = binding
         .iter()
         .map(|a| agent::Battler {
             agent: a,
@@ -75,23 +75,43 @@ fn battle_royale() {
         })
         .collect::<Vec<_>>();
 
-    for agent1 in get_all_agents().iter() {
-        for agent2 in get_all_agents().iter() {
-            let scores = match_agents(vec![&agent1, &agent2], false, 1000);
-            total_score += scores[0];
-            println!(
-                "{:>20} vs {:20} {:>4} : {:<4}",
-                agent1.get_attributes().name,
-                agent2.get_attributes().name,
-                scores[0],
-                scores[1]
+    for agent1 in 0..battlers.len() {
+        for agent2 in agent1 + 1..battlers.len() {
+            let scores = match_agents(
+                vec![battlers[agent1].agent, battlers[agent2].agent],
+                false,
+                1000,
             );
+            battlers[agent1].scores.push(scores[0]);
+            battlers[agent2].scores.push(scores[1]);
         }
     }
-    println!(
-        "Average score: {}",
-        total_score as f64 / get_all_agents().len() as f64
-    );
+    for i in 0..battlers.len() {
+        let total: u64 = battlers[i].scores.iter().sum();
+        battlers[i].weighted_score = total as f64 / battlers[i].scores.len() as f64;
+        println!(
+            "{:>20} {:>4}",
+            battlers[i].agent.get_attributes().name,
+            battlers[i].weighted_score
+        );
+    }
+    // for agent1 in get_all_agents().iter() {
+    //     for agent2 in get_all_agents().iter() {
+    //         let scores = match_agents(vec![&agent1, &agent2], false, 1000);
+    //         total_score += scores[0];
+    //         println!(
+    //             "{:>20} vs {:20} {:>4} : {:<4}",
+    //             agent1.get_attributes().name,
+    //             agent2.get_attributes().name,
+    //             scores[0],
+    //             scores[1]
+    //         );
+    //     }
+    // }
+    // println!(
+    //     "Average score: {}",
+    //     total_score as f64 / get_all_agents().len() as f64
+    // );
     // TODO keep scores of all agents
 }
 
