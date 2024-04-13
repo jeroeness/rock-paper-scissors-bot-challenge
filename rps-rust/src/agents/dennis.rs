@@ -6,14 +6,18 @@ impl agent::Agent for Dennis {
     fn get_attributes(&self) -> agent::AgentAttributes {
         agent::AgentAttributes {
             author: "Dennis",
-            description: "Dennis' amature agent",
+            description: 
+                "Dennis' professional agent",
             name: "Dennis Agent",
             enabled: true,
         }
     }
 
-    fn play(&self, round: usize, _: &str, _: &str, _: f64) -> String {
-        let choices = ["R", "P", "S"];
-        choices.get(round % 3).unwrap().to_string()
+    fn play(&self, round: usize, _my: &str, opp: &str, _rnd: f64) -> String {
+        // if (opp.chars().nth(0))
+        let i : usize = round % 42;
+        return "R".to_string();
+        // return "RRRRPRRPRRRPRRRPRRRRPRRRRRPRRRRRRPRRRRRRRR"[i .. i+1].to_string();
+        //return "RPS"[round % 3..round % 3 + 1].to_string();
     }
 }
