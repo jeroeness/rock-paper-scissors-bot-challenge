@@ -16,6 +16,20 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug Ivo",
+            "preLaunchTask": "cargo build",
+            "program": "${workspaceFolder}/target/debug/rps-rust",
+            "args": [
+                "--agent",
+                "ivo",
+                "-v",
+                "-r=10"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Torunament",
             "preLaunchTask": "cargo build --release",
             "program": "${workspaceFolder}/target/release/rps-rust",
