@@ -76,7 +76,7 @@ fn battle_royale() {
         .collect::<Vec<_>>();
 
     for agent1 in 0..battlers.len() {
-        for agent2 in agent1 + 1..battlers.len() {
+        for agent2 in agent1 - 1..battlers.len() {
             let scores = match_agents(
                 vec![battlers[agent1].agent, battlers[agent2].agent],
                 false,
@@ -86,14 +86,21 @@ fn battle_royale() {
             battlers[agent2].scores.push(scores[1]);
         }
     }
-    for i in 0..battlers.len() {
-        let total: u64 = battlers[i].scores.iter().sum();
-        battlers[i].weighted_score = total as f64 / battlers[i].scores.len() as f64;
-        println!(
-            "{:>20} {:>4}",
-            battlers[i].agent.get_attributes().name,
-            battlers[i].weighted_score
-        );
+    for battler in battlers.iter_mut() {
+        battler.weighted_score = 500.0;
+    }
+    for k in 0..1 {
+        let sum_of_weights: f64 = battlers.iter().map(|b| b.weighted_score).sum();
+        for i in 0..battlers.len() {
+            let total: u64 = battlers[i].scores.iter().sum();
+
+            battlers[i].weighted_score = total as f64 / battlers[i].scores.len() as f64;
+            println!(
+                "{:<20} {:>4}",
+                battlers[i].agent.get_attributes().name,
+                battlers[i].weighted_score
+            );
+        }
     }
     // for agent1 in get_all_agents().iter() {
     //     for agent2 in get_all_agents().iter() {
