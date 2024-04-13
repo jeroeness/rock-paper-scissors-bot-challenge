@@ -89,6 +89,7 @@ fn battle_royale() {
     }
     for b in battlers.iter_mut() {
         b.weighted_score = 400.0;
+        println!("{:<20} {:?}", b.agent.get_attributes().name, b.scores)
     }
     for _ in 0..10 {
         for i in 0..battlers.len() {

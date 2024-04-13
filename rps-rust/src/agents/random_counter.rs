@@ -8,7 +8,7 @@ impl agent::Agent for RandomCounter {
             author: "Jeroen",
             description: "Randomly plays Rock, Paper, Scissors, but tries to counter the opponent",
             name: "Random Counter",
-            enabled: true,
+            enabled: false,
         }
     }
 
