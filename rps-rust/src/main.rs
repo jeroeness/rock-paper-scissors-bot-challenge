@@ -66,6 +66,7 @@ fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
 
 fn battle_royale() {
     let binding = get_all_agents();
+    let rounds = 1000;
     let mut battlers = binding
         .iter()
         .map(|a| agent::Battler {
@@ -76,59 +77,43 @@ fn battle_royale() {
         .collect::<Vec<_>>();
 
     for agent1 in 0..battlers.len() {
-        for agent2 in agent1 - 1..battlers.len() {
+        for agent2 in agent1..battlers.len() {
             let scores = match_agents(
                 vec![battlers[agent1].agent, battlers[agent2].agent],
                 false,
-                1000,
+                rounds,
             );
             battlers[agent1].scores.push(scores[0]);
             battlers[agent2].scores.push(scores[1]);
         }
     }
-    for battler in battlers.iter_mut() {
-        battler.weighted_score = 500.0;
+    for b in battlers.iter_mut() {
+        b.weighted_score = 400.0;
     }
-    for k in 0..1 {
-        let sum_of_weights: f64 = battlers.iter().map(|b| b.weighted_score).sum();
+    for _ in 0..10 {
         for i in 0..battlers.len() {
-            let total: u64 = battlers[i].scores.iter().sum();
-
-            battlers[i].weighted_score = total as f64 / battlers[i].scores.len() as f64;
-            println!(
-                "{:<20} {:>4}",
-                battlers[i].agent.get_attributes().name,
-                battlers[i].weighted_score
-            );
+            let sum_of_weights: f64 = battlers.iter().map(|b| b.weighted_score).sum();
+            // let total: u64 = battlers[i].scores.iter().map(|s| s).sum();
+            let mut total = 0.0;
+            for j in 0..battlers.len() {
+                total +=
+                    battlers[i].scores[j] as f64 * (battlers[j].weighted_score / rounds as f64);
+            }
+            battlers[i].weighted_score = total as f64 / sum_of_weights * rounds as f64;
         }
     }
-    // for agent1 in get_all_agents().iter() {
-    //     for agent2 in get_all_agents().iter() {
-    //         let scores = match_agents(vec![&agent1, &agent2], false, 1000);
-    //         total_score += scores[0];
-    //         println!(
-    //             "{:>20} vs {:20} {:>4} : {:<4}",
-    //             agent1.get_attributes().name,
-    //             agent2.get_attributes().name,
-    //             scores[0],
-    //             scores[1]
-    //         );
-    //     }
-    // }
-    // println!(
-    //     "Average score: {}",
-    //     total_score as f64 / get_all_agents().len() as f64
-    // );
-    // TODO keep scores of all agents
-}
-
-fn single_battle(
-    agent1: &Box<dyn agent::Agent>,
-    agent2: &Box<dyn agent::Agent>,
-    verbose: bool,
-    rounds: usize,
-) -> [u64; 2] {
-    match_agents(vec![&agent1, &agent2], verbose, rounds)
+    battlers.sort_by(|a, b| b.weighted_score.partial_cmp(&a.weighted_score).unwrap());
+    println!("Rank  Agent                Author     Score");
+    println!("====  ==================   =========  =====");
+    for i in 0..battlers.len() {
+        println!(
+            " #{:<3} {:<20} {:<10} {:>4.1}",
+            i + 1,
+            battlers[i].agent.get_attributes().name,
+            battlers[i].agent.get_attributes().author,
+            battlers[i].weighted_score
+        );
+    }
 }
 
 fn one_to_all(agent: &Box<dyn agent::Agent>, verbose: bool, rounds: usize) {
