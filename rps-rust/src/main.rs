@@ -4,6 +4,7 @@ mod agent;
 mod agents;
 
 use rand::Rng;
+use std::time::Instant;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -34,12 +35,14 @@ fn get_agent(name: &str) -> Box<dyn agent::Agent> {
         "random_counter" => Box::new(agents::random_counter::RandomCounter {}),
         "rock_scissors" => Box::new(agents::rock_scissors::RockScissors {}),
         "delayed_mirror" => Box::new(agents::delayed_mirror::DelayedMirror {}),
+        "dennis" => Box::new(agents::dennis::Dennis {}),
+        "ivo" => Box::new(agents::ivo::Ivo {}),
 
         _ => panic!("Unknown agent '{}'", name),
     }
 }
 
-fn get_all_agents() -> Vec<&'static str> {
+fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
     vec![
         "cycler",
         "random",
@@ -52,20 +55,29 @@ fn get_all_agents() -> Vec<&'static str> {
         "random_counter",
         "rock_scissors",
         "delayed_mirror",
+        "dennis",
+        "ivo",
     ]
+    .into_iter()
+    .map(|s| get_agent(s))
+    .filter(|a| a.get_attributes().enabled)
+    .collect()
 }
 
 fn battle_royale() {
     let mut total_score = 0;
+    let mut battlers = get_all_agents()
+        .iter()
+        .map(|a| agent::Battler {
+            agent: a,
+            scores: vec![],
+            weighted_score: 0.0,
+        })
+        .collect::<Vec<_>>();
+
     for agent1 in get_all_agents().iter() {
         for agent2 in get_all_agents().iter() {
-            if agent1 == agent2 {
-                continue;
-            }
-
-            let agent1 = get_agent(agent1);
-            let agent2 = get_agent(agent2);
-            let scores = match_agents(&agent1, &agent2, false, 1000);
+            let scores = match_agents(vec![&agent1, &agent2], false, 1000);
             total_score += scores[0];
             println!(
                 "{:>20} vs {:20} {:>4} : {:<4}",
@@ -83,24 +95,30 @@ fn battle_royale() {
     // TODO keep scores of all agents
 }
 
-fn single_battle(agent1: &str, agent2: &str, verbose: bool, rounds: usize) -> [u64; 2] {
-    let agent1 = get_agent(agent1);
-    let agent2 = get_agent(agent2);
-    match_agents(&agent1, &agent2, verbose, rounds)
+fn single_battle(
+    agent1: &Box<dyn agent::Agent>,
+    agent2: &Box<dyn agent::Agent>,
+    verbose: bool,
+    rounds: usize,
+) -> [u64; 2] {
+    match_agents(vec![&agent1, &agent2], verbose, rounds)
 }
 
-fn one_to_all(agent: &str, verbose: bool, rounds: usize) {
+fn one_to_all(agent: &Box<dyn agent::Agent>, verbose: bool, rounds: usize) {
     let mut total_score = 0;
     for opponent in get_all_agents()
         .iter()
-        .filter(|agent| get_agent(agent).get_attributes().enabled)
+        .filter(|agent| agent.get_attributes().enabled)
         .collect::<Vec<_>>()
     {
-        let scores = single_battle(&agent, opponent, verbose, rounds);
+        let scores = match_agents(vec![&agent, &opponent], verbose, rounds);
         total_score += scores[0];
         println!(
             "{:>20} vs {:20} {:>4} : {:<4}",
-            agent, opponent, scores[0], scores[1]
+            agent.get_attributes().name,
+            opponent.get_attributes().name,
+            scores[0],
+            scores[1]
         );
     }
     println!(
@@ -115,14 +133,18 @@ fn main() {
     match args.agent {
         Some(agent) => match args.opponent {
             Some(opponent) => {
-                let scores = single_battle(&agent, &opponent, args.verbose, args.rounds);
+                let scores = match_agents(
+                    vec![&get_agent(&agent), &get_agent(&opponent)],
+                    args.verbose,
+                    args.rounds,
+                );
                 println!(
                     "{:>20} vs {:20} {:>4} : {:<4}",
                     agent, opponent, scores[0], scores[1]
                 );
             }
             None => {
-                one_to_all(&agent, args.verbose, args.rounds);
+                one_to_all(&get_agent(&agent), args.verbose, args.rounds);
             }
         },
         None => {
@@ -131,45 +153,43 @@ fn main() {
     }
 }
 
-fn match_agents(
-    agent1: &Box<dyn agent::Agent>,
-    agent2: &Box<dyn agent::Agent>,
-    verbose: bool,
-    rounds: usize,
-) -> [u64; 2] {
+fn match_agents(agents: Vec<&Box<dyn agent::Agent>>, verbose: bool, rounds: usize) -> [u64; 2] {
     let mut moves = ["".to_string(), "".to_string()];
     let mut scores: [u64; 2] = [0, 0];
     let mut draw_counter = 0;
     let mut rng = rand::thread_rng();
 
     for r in 1..=rounds {
-        let m1 = agent1.play(r, &moves[0], &moves[1], rng.gen::<f64>());
-        let m2 = agent2.play(r, &moves[1], &moves[0], rng.gen::<f64>());
-
-        assert!(
-            m1 == "R" || m1 == "P" || m1 == "S",
-            "Invalid move '{}' in {}",
-            m1,
-            agent1.get_attributes().name
-        );
-        assert!(
-            m2 == "R" || m2 == "P" || m2 == "S",
-            "Invalid move '{}' in {}",
-            m2,
-            agent2.get_attributes().name
-        );
-
-        moves[0] += &m1;
-        moves[1] += &m2;
+        let mut mvs = vec!["".to_string(); 2];
+        for i in 0..2 {
+            let agent = &agents[i];
+            let start_time = Instant::now();
+            let mv = agent.play(r, &moves[0], &moves[1], rng.gen::<f64>());
+            let elapsed_time = start_time.elapsed();
+            assert!(
+                elapsed_time < std::time::Duration::from_millis(2),
+                "Agent '{}' took too much thinking time: {:?}",
+                agent.get_attributes().name,
+                elapsed_time
+            );
+            assert!(
+                mv == "R" || mv == "P" || mv == "S",
+                "Invalid move '{}' in {}",
+                mv,
+                agent.get_attributes().name
+            );
+            moves[i] += &mv;
+            mvs[i] = mv;
+        }
 
         let mut verbose_score1 = " ";
         let mut verbose_score2 = " ";
 
-        if m1 != m2 {
+        if mvs[0] != mvs[1] {
             draw_counter = 0;
         }
 
-        if m1 == m2 {
+        if mvs[0] == mvs[1] {
             draw_counter += 1;
             if draw_counter > 50 {
                 if verbose {
@@ -177,16 +197,16 @@ fn match_agents(
                 }
                 break;
             }
-        } else if m1 == "S" && m2 == "P" {
+        } else if mvs[0] == "S" && mvs[1] == "P" {
             scores[0] += 1;
             verbose_score1 = "*";
-        } else if m1 == "P" && m2 == "R" {
+        } else if mvs[0] == "P" && mvs[1] == "R" {
             scores[0] += 1;
             verbose_score1 = "*";
-        } else if m1 == "R" && m2 == "S" {
+        } else if mvs[0] == "R" && mvs[1] == "S" {
             scores[0] += 2;
             verbose_score1 = "*";
-        } else if m2 == "R" {
+        } else if mvs[1] == "R" {
             scores[1] += 2;
             verbose_score2 = "*";
         } else {
@@ -197,7 +217,7 @@ fn match_agents(
         if verbose {
             println!(
                 "Round {:4}: {}{}{}  vs {}{}{}",
-                r, verbose_score1, m1, verbose_score1, verbose_score2, m2, verbose_score2
+                r, verbose_score1, mvs[0], verbose_score1, verbose_score2, mvs[1], verbose_score2
             );
         }
     }

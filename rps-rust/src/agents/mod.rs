@@ -1,5 +1,7 @@
 pub(crate) mod cycler;
 pub(crate) mod delayed_mirror;
+pub(crate) mod dennis;
+pub(crate) mod ivo;
 pub(crate) mod learner;
 pub(crate) mod mirror;
 pub(crate) mod phased_cycler;

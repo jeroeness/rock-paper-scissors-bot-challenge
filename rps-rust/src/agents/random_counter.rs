@@ -12,7 +12,7 @@ impl agent::Agent for RandomCounter {
         }
     }
 
-    fn play(&self, round: usize, my: &str, opp: &str, rnd: f64) -> String {
+    fn play(&self, round: usize, _my: &str, opp: &str, rnd: f64) -> String {
         if round < 3 {
             return "RPS".chars().nth((rnd * 3.0) as usize).unwrap().to_string();
         }

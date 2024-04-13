@@ -12,7 +12,7 @@ impl agent::Agent for RockScissors {
         }
     }
 
-    fn play(&self, round: usize, _: &str, _: &str, rnd: f64) -> String {
+    fn play(&self, _round: usize, _: &str, _: &str, rnd: f64) -> String {
         return "RS".chars().nth((rnd * 2.0) as usize).unwrap().to_string();
     }
 }

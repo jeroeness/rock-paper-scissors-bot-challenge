@@ -9,3 +9,9 @@ pub trait Agent {
     fn play(&self, round: usize, my: &str, opp: &str, rnd: f64) -> String;
     fn get_attributes(&self) -> AgentAttributes;
 }
+
+pub struct Battler<'a> {
+    pub agent: &'a Box<dyn Agent>,
+    pub scores: Vec<u64>,
+    pub weighted_score: f64,
+}

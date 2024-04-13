@@ -17,8 +17,8 @@
             "type": "lldb",
             "request": "launch",
             "name": "Torunament",
-            "preLaunchTask": "cargo build",
-            "program": "${workspaceFolder}/target/debug/rps-rust",
+            "preLaunchTask": "cargo build --release",
+            "program": "${workspaceFolder}/target/release/rps-rust",
             "args": [],
             "cwd": "${workspaceFolder}"
         },

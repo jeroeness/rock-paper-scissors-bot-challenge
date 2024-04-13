@@ -10,6 +10,17 @@
             "problemMatcher": [
                 "$rustc"
             ]
+        },
+        {
+            "label": "cargo build --release",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
         }
     ]
 }

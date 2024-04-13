@@ -13,7 +13,7 @@ impl agent::Agent for Learner {
         }
     }
 
-    fn play(&self, round: usize, my: &str, opp: &str, _rnd: f64) -> String {
+    fn play(&self, round: usize, _my: &str, opp: &str, _rnd: f64) -> String {
         if opp.len() < 3 {
             return "R".to_string();
         }
