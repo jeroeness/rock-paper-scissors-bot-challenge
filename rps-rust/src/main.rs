@@ -34,6 +34,7 @@ fn get_agent(name: &str) -> Box<dyn agent::Agent> {
         "random_biased" => Box::new(agents::random_biased::RandomBiased {}),
         "random_counter" => Box::new(agents::random_counter::RandomCounter {}),
         "rock_scissors" => Box::new(agents::rock_scissors::RockScissors {}),
+        "scissors" => Box::new(agents::scissors::Scissors {}),
         "delayed_mirror" => Box::new(agents::delayed_mirror::DelayedMirror {}),
         "dennis" => Box::new(agents::dennis::Dennis {}),
         "ivo" => Box::new(agents::ivo::Ivo {}),
@@ -44,9 +45,9 @@ fn get_agent(name: &str) -> Box<dyn agent::Agent> {
 
 fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
     vec![
+        "rock",
         "cycler",
         "random",
-        "rock",
         "phased_cycler",
         "reverse_cycler",
         "learner",
@@ -54,10 +55,11 @@ fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
         "random_biased",
         "random_counter",
         "rock_scissors",
+        "scissors",
         "delayed_mirror",
-        "dennis",
         "ivo",
-    ]
+        "dennis",
+        ]
     .into_iter()
     .map(|s| get_agent(s))
     .filter(|a| a.get_attributes().enabled)
