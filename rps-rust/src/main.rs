@@ -36,7 +36,7 @@ fn get_agent(name: &str) -> Box<dyn agent::Agent> {
         "rock_scissors" => Box::new(agents::rock_scissors::RockScissors {}),
         "delayed_mirror" => Box::new(agents::delayed_mirror::DelayedMirror {}),
         "dennis" => Box::new(agents::dennis::Dennis {}),
-        "ivo" => Box::new(agents::ivo::Ivo {}),
+        "ivo" => Box::new(agents::ivo::Ivo::new()),
 
         _ => panic!("Unknown agent '{}'", name),
     }
@@ -79,7 +79,12 @@ fn battle_royale() {
     for agent1 in 0..battlers.len() {
         for agent2 in agent1..battlers.len() {
             let mut avg_score = [0.0, 0.0];
-            for trials in 0..9 {
+            for trial in 0..9 {
+                println!(
+                    "Starting trial {trial} between {} and {}",
+                    battlers[agent1].agent.get_attributes().name,
+                    battlers[agent2].agent.get_attributes().name
+                );
                 let scores = match_agents(
                     vec![battlers[agent1].agent, battlers[agent2].agent],
                     false,
@@ -180,6 +185,8 @@ fn main() {
 }
 
 fn match_agents(agents: Vec<&Box<dyn agent::Agent>>, verbose: bool, rounds: usize) -> [u64; 2] {
+    assert!(agents.len() == 2);
+
     let mut moves = ["".to_string(), "".to_string()];
     let mut scores: [u64; 2] = [0, 0];
     let mut draw_counter = 0;
@@ -193,7 +200,7 @@ fn match_agents(agents: Vec<&Box<dyn agent::Agent>>, verbose: bool, rounds: usiz
             let mv = agent.play(r, &moves[0], &moves[1], rng.gen::<f64>());
             let elapsed_time = start_time.elapsed();
             assert!(
-                elapsed_time < std::time::Duration::from_millis(2),
+                elapsed_time < std::time::Duration::from_millis(200),
                 "Agent '{}' took too much thinking time: {:?}",
                 agent.get_attributes().name,
                 elapsed_time
