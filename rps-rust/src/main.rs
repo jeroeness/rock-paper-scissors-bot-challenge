@@ -59,7 +59,7 @@ fn get_all_agents() -> Vec<Box<dyn agent::Agent>> {
         "delayed_mirror",
         "ivo",
         "dennis",
-        ]
+    ]
     .into_iter()
     .map(|s| get_agent(s))
     .filter(|a| a.get_attributes().enabled)
@@ -202,7 +202,7 @@ fn match_agents(agents: Vec<&Box<dyn agent::Agent>>, verbose: bool, rounds: usiz
             let mv = agent.play(r, &moves[0], &moves[1], rng.gen::<f64>());
             let elapsed_time = start_time.elapsed();
             assert!(
-                elapsed_time < std::time::Duration::from_millis(200),
+                elapsed_time < std::time::Duration::from_millis(50),
                 "Agent '{}' took too much thinking time: {:?}",
                 agent.get_attributes().name,
                 elapsed_time
