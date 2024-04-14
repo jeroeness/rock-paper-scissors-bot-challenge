@@ -11,3 +11,4 @@ pub(crate) mod random_counter;
 pub(crate) mod reverse_cycler;
 pub(crate) mod rock;
 pub(crate) mod rock_scissors;
+pub(crate) mod scissors;
